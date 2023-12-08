@@ -65,7 +65,7 @@ jobs:
 
   Build-Qt:
     runs-on: ubuntu-22.04
-    depends-on: Build-QtBuilder
+    needs: Build-QtBuilder
     permissions:
       contents: read
       packages: write
@@ -101,7 +101,7 @@ jobs:
 
   Build-Qt-Dev-Image:
     runs-on: ubuntu-22.04
-    depends-on: Build-Qt
+    needs: Build-Qt
     permissions:
       contents: read
       packages: write
