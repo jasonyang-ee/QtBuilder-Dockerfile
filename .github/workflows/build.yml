@@ -14,7 +14,7 @@ on:
       - '**.md'
 
 jobs:
-  Build QtBuilder:
+  Build-QtBuilder:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -63,7 +63,7 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-  Build Qt:
+  Build-Qt:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -98,7 +98,7 @@ jobs:
         path: ${{ github.workspace }}/build/Qt-arm64-${{ matrix.version }}.tar.xz
 
 
-  Build Qt Developmnet Image:
+  Build-Qt-Dev-Image:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -157,4 +157,3 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: QTVER=${{ matrix.version }}
-        
