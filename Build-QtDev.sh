@@ -8,4 +8,4 @@ docker buildx build \
 	--build-arg QTVER=$version \
 	-t qt-dev:$version \
 	-f ./QtDev/Dockerfile.dev \
-	./QtDev
+	.

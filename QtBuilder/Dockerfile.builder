@@ -1,7 +1,7 @@
 FROM ubuntu:jammy
 
-COPY sources.list /etc/apt/sources.list
-COPY toolchain.cmake /root/toolchain.cmake
+COPY QtBuilder/sources.list /etc/apt/sources.list
+COPY QtBuilder/toolchain.cmake /root/toolchain.cmake
 
 RUN \
     export DEBIAN_FRONTEND=noninteractive && \
