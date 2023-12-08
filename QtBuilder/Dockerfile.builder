@@ -67,3 +67,8 @@ RUN \
     apt-get -y autoclean && \
     apt-get -y clean && \
     rm -rf /var/lib/apt/lists/*
+
+COPY build_qt6_amd64.sh /build_qt6_amd64.sh
+COPY build_qt6_arm64.sh /build_qt6_arm64.sh
+RUN chmod +x /build_qt6_amd64.sh
+RUN chmod +x /build_qt6_arm64.sh
