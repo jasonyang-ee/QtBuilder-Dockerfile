@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Build Qt from source repository
+
 set -e
 
 apt-get update
