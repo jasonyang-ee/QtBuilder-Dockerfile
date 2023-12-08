@@ -3,8 +3,8 @@ FROM debian:bookworm-slim
 ARG TARGETPLATFORM
 ARG QTVER
 
-COPY ../qt_export/Qt-amd64-$QTVER.tar.xz /root/
-COPY ../qt_export/Qt-arm64-$QTVER.tar.xz /root/
+COPY ../build/Qt-amd64-$QTVER.tar.xz /root/
+COPY ../build/Qt-arm64-$QTVER.tar.xz /root/
 COPY ../QtBuilder/toolchain.cmake /root/
 
 RUN \
