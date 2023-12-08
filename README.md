@@ -23,7 +23,3 @@ In those two scripts, you can change the Qt version by changing the `version` va
 ## Cautions
 
 Building Qt is resource intensive. It is recommended to have at least 8GB of RAM and 4 CPU cores for building Qt. Otherwise, the build process may fail.
-
-## Credits
-
-https://github.com/carlonluca/docker-qt
