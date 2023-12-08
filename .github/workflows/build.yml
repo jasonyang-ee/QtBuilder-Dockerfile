@@ -65,13 +65,14 @@ jobs:
 
   Build-Qt:
     runs-on: ubuntu-22.04
+    depends-on: Build-QtBuilder
     permissions:
       contents: read
       packages: write
 
     strategy:
       matrix:
-        version: [6.6.1]
+        version: [6.6.1, 6.5.3]
 
     steps:
     - name: Checkout Project
@@ -100,13 +101,14 @@ jobs:
 
   Build-Qt-Dev-Image:
     runs-on: ubuntu-22.04
+    depends-on: Build-Qt
     permissions:
       contents: read
       packages: write
 
     strategy:
       matrix:
-        version: [6.6.1]
+        version: [6.6.1, 6.5.3]
 
     steps:
     - name: Checkout Project
