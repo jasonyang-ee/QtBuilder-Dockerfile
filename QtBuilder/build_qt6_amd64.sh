@@ -22,7 +22,7 @@ mkdir build
 
 cd build
 ../qt5/configure -release -nomake examples -nomake tests -no-zstd -webengine-proprietary-codecs -prefix /opt/Qt-amd64-$1
-cmake --build . --parallel $(($(nproc)+4))
+cmake --build . --parallel $(nproc)
 cmake --install .
 cp config.summary /opt/Qt-amd64-$1/
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=6.6.0
+version=6.6.1
 
 # Build Qt Developer Image
 docker buildx build \

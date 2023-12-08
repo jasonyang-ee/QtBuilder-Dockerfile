@@ -33,15 +33,22 @@ RUN \
     libnss3-dev libopus-dev libpng-dev libsqlite3-dev libssl-dev \
     libx11-xcb-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb1-dev \
     libxcursor-dev libxi-dev libxml2-dev libxrender-dev libxslt-dev mesa-common-dev \
-    zlib1g-dev '^libxcb.*-dev' libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev \
+    zlib1g-dev '^libxcb.*-dev' libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev wayland-protocols \
     libicu-dev libxslt-dev libxcursor-dev libxcomposite-dev libxdamage-dev libxrandr-dev libxtst-dev \
     libxss-dev libdbus-1-dev libevent-dev libfontconfig1-dev libcap-dev libpulse-dev libudev-dev \
     libpci-dev libnss3-dev libasound2-dev libegl1-mesa-dev libasound2-dev libgstreamer1.0-dev \
     libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev libnspr4-dev libcups2-dev \
     libavformat-dev libavcodec-dev libavutil-dev libswresample-dev libswscale-dev libavdevice-dev \
     libmng-dev libwebp-dev libxcb-xinput-dev libwebpmux3 libvpx-dev zstd libzstd-dev \
-    libpcre2-dev libclang-dev libllvm14 python3 python3-html5lib libxshmfence-dev libxkbfile-dev libbluetooth-dev \
-    libsctp-dev libsnappy-dev libmd4c-dev libmd4c-html0-dev libharfbuzz-dev libminizip-dev libb2-dev libva-dev
+    libpcre2-dev libclang-dev libllvm14 python3-html5lib libxshmfence-dev libxkbfile-dev libbluetooth-dev \
+    libsctp-dev libsnappy-dev libmd4c-dev libmd4c-html0-dev libharfbuzz-dev libminizip-dev libb2-dev libva-dev \
+	libxcb-keysyms1-dev \
+	libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev libxcb-sync-dev \
+	libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev \
+	libxcb-render-util0-dev libxcb-xkb-dev libxcb-xinput-dev libxcb-cursor-dev libkrb5-dev\
+	python3-setuptools python3-mako \
+	python3-venv
+
 
 # aqt
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
@@ -51,7 +58,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
     python3-pip \
     build-essential \
     libdbus-1-3 \
-    libpulse-mainloop-glib0
+    libpulse-mainloop-glib0 \
+	nodejs \
+	libnode72 \
+	clang \
+	llvm
 
 RUN pip3 install aqtinstall
 
