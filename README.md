@@ -8,6 +8,8 @@ QtDev is a base Docker container for developing Qt applications.
 
 User must take QtDev as a base image and add their own Qt application source code into the container to compile the application.
 
+
+
 ## Usage
 
 1. Build Qt using `Build-QtBuilder.sh` script
@@ -17,7 +19,9 @@ User must take QtDev as a base image and add their own Qt application source cod
 	1. It will produce a Docker image named `qt-dev`.
 
 
-In those two scripts, you can change the Qt version by changing the `version` variable in the script. Currently, only major version 6 has been tested.
+In those two scripts, you can change the Qt version by changing the `version` variable in the script. 
+
+### Only major version 6 has been tested.
 
 
 ## Cautions
