@@ -13,9 +13,6 @@ on:
     paths-ignore:
       - '**.md'
 
-env:
-  VERSION: 6.6.1
-
 jobs:
   Build QtBuilder:
     runs-on: ubuntu-22.04
@@ -74,7 +71,7 @@ jobs:
 
     strategy:
       matrix:
-        version: [${{ env.VERSION }}]
+        version: [6.6.1]
 
     steps:
     - name: Checkout Project
@@ -109,7 +106,7 @@ jobs:
 
     strategy:
       matrix:
-        version: [${{ env.VERSION }}]
+        version: [6.6.1]
 
     steps:
     - name: Checkout Project
