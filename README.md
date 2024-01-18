@@ -12,16 +12,26 @@ User must take QtDev as a base image and add their own Qt application source cod
 
 ## Usage
 
-1. Build Qt using `Build-QtBuilder.sh` script
-	1. It will produce a Docker image named `qt-builder` .
-	2. It will produce compiled Qt libraries (amd64 & arm64) in the `build` folder.
-2. Build Qt development environment using `Build-QtDev.sh` script
-	1. It will produce a Docker image named `qt-dev`.
+- Build Qt using `Build-QtBuilder.sh` script.
+  
+	It will produce a Docker image named `qt-builder`
 
+	```bash
+	./Build-QtBuilder.sh
+	```
 
-In those two scripts, you can change the Qt version by changing the `version` variable in the script. 
+- Build Qt development environment using `Build-QtDev.sh` script
 
-### Only major version 6 has been tested.
+	It will use `qt-builder` produce compiled Qt libraries (amd64 & arm64) in the `build` folder
+
+	Then it will produce a Docker image named `qt-dev`
+
+	```bash
+	./Build-QtDev.sh
+	./Build-QtDev.sh --help
+	./Build-QtDev.sh --version 6.2.0
+	```
+	> Only major version 6 has been tested.
 
 
 ## Cautions
