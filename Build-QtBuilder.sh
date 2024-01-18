@@ -3,7 +3,7 @@
 version=6.6.1
 
 # Build Qt Builder Image
-docker build -t qt-builder:6 -f ./QtBuilder/Dockerfile.builder ./QtBuilder
+docker buildx build --no-cache --platform linux/amd64 -t qt-builder:6 -f ./QtBuilder/Dockerfile.builder ./QtBuilder
 
 # Use above Qt Builder Image to build Qt
 # Native AMD64 Build

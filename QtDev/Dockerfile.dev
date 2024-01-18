@@ -42,9 +42,6 @@ FROM QtEnvironment as DevEnvironment
 
 # Regular build tools
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
-    apt-utils curl nano git \
-	cmake build-essential ninja-build \
-	libglx-mesa0 mesa-utils-extra \
-    libegl1 libgles2 libgles-dev \
-    && apt-get -y upgrade \
+    apt-utils curl nano git cmake build-essential ninja-build \
+	libwayland-client0 libwayland-server0 libglx-mesa0 mesa-utils-extra libegl1 libgles2 libgles-dev \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
