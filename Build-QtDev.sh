@@ -36,8 +36,9 @@ if [[ $HELP == true ]]; then
 	echo "Options:"
 	echo "  -h, --help                Show this help message and exit"
 	echo ""
-	echo "  -v, --version <VERSION>   Specify the version of Qt to build"
-	echo "							  (default: 6.6.1)"
+	echo "  -v, --version <VERSION>   Overwrite the version of Qt to build"
+	echo "                            [default: 6.6.1]"
+	echo ""
 	exit 0
 fi
 
