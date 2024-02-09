@@ -1,85 +1,57 @@
-FROM ubuntu:jammy
+FROM debian:bookworm as qt-environment
 
-COPY sources.list /etc/apt/sources.list
-COPY toolchain.cmake /root/toolchain.cmake
+ARG TARGETARCH
 
-RUN \
-    export DEBIAN_FRONTEND=noninteractive && \
-    dpkg --add-architecture arm64 && \
-    apt-get -y update && \
-    apt-get -y upgrade && \
-    apt-get -y install build-essential && \
-    apt-get -y install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu pip freeglut3-dev:arm64 gdb git iputils-ping \
-    libgl1-mesa-dev:arm64 libglu1-mesa-dev:arm64 libjpeg-dev:arm64 libmysqlclient-dev:arm64 \
-    libnss3-dev:arm64 libopus-dev:arm64 libpng-dev:arm64 libsqlite3-dev:arm64 libssl-dev:arm64 \
-    libx11-xcb-dev:arm64 libxcb-xinerama0-dev:arm64 libxcb-xkb-dev:arm64 libxcb1-dev:arm64 \
-    libxcursor-dev:arm64 libxi-dev:arm64 libxml2-dev:arm64 libxrender-dev:arm64 libxslt-dev:arm64 \
-    lzip mesa-common-dev:arm64 nano perl python3 valgrind wget zlib1g-dev:arm64 '^libxcb.*-dev:arm64' \
-    libxkbcommon-dev:arm64 libxkbcommon-x11-dev:arm64 wget libwayland-dev:arm64 flex bison gperf \
-    libicu-dev:arm64 libxslt-dev:arm64 ruby libxcursor-dev:arm64 libxcomposite-dev:arm64 \
-    libxdamage-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxss-dev:arm64 libdbus-1-dev:arm64 \
-    libevent-dev:arm64 libfontconfig1-dev:arm64 libcap-dev:arm64 libpulse-dev:arm64 libudev-dev:arm64 \
-    libpci-dev:arm64 libnss3-dev:arm64 libasound2-dev:arm64 libegl1-mesa-dev:arm64 gperf bison nodejs \
-    libasound2-dev:arm64 libgstreamer1.0-dev:arm64 libgstreamer-plugins-base1.0-dev:arm64 \
-    libgstreamer-plugins-good1.0-dev:arm64 libnspr4-dev:arm64 libcups2-dev:arm64 \
-    libmng-dev:arm64 libwebp-dev:arm64 libxcb-xinput-dev:arm64 libwebpmux3:arm64 libvpx-dev:arm64 \
-    libavformat-dev:arm64 libavcodec-dev:arm64 libavutil-dev:arm64 libswresample-dev:arm64 libswscale-dev:arm64 libavdevice-dev:arm64 libzstd-dev:arm64 \
-    libpcre2-dev:arm64 libclang-dev:arm64 libllvm14:arm64 libxshmfence-dev:arm64 libxkbfile-dev:arm64 libbluetooth-dev:arm64 \
-    libsctp-dev:arm64 libsnappy-dev:arm64 libmd4c-dev:arm64 libmd4c-html0-dev:arm64 libharfbuzz-dev:arm64 libminizip-dev:arm64 \
-    libb2-dev:arm64 libva-dev:arm64 \
-    g++-aarch64-linux-gnu gcc-aarch64-linux-gnu ninja-build cmake && \
-    \
-    apt-get -y install freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev libjpeg-dev libmysqlclient-dev \
-    libnss3-dev libopus-dev libpng-dev libsqlite3-dev libssl-dev \
-    libx11-xcb-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb1-dev \
-    libxcursor-dev libxi-dev libxml2-dev libxrender-dev libxslt-dev mesa-common-dev \
-    zlib1g-dev '^libxcb.*-dev' libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev wayland-protocols \
-    libicu-dev libxslt-dev libxcursor-dev libxcomposite-dev libxdamage-dev libxrandr-dev libxtst-dev \
-    libxss-dev libdbus-1-dev libevent-dev libfontconfig1-dev libcap-dev libpulse-dev libudev-dev \
-    libpci-dev libnss3-dev libasound2-dev libegl1-mesa-dev libasound2-dev libgstreamer1.0-dev \
-    libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev libnspr4-dev libcups2-dev \
-    libavformat-dev libavcodec-dev libavutil-dev libswresample-dev libswscale-dev libavdevice-dev \
-    libmng-dev libwebp-dev libxcb-xinput-dev libwebpmux3 libvpx-dev zstd libzstd-dev \
-    libpcre2-dev libclang-dev libllvm14 python3-html5lib libxshmfence-dev libxkbfile-dev libbluetooth-dev \
-    libsctp-dev libsnappy-dev libmd4c-dev libmd4c-html0-dev libharfbuzz-dev libminizip-dev libb2-dev libva-dev \
+RUN apt-get -y update && apt-get install -y --no-install-recommends \
+	git \
+	xz-utils \
+	cmake \
+	ninja-build \
+	build-essential \
+	ca-certificates \
+	python3 \
+	python3-pip \
+	libfontconfig1-dev \
+	libfreetype6-dev \
+	libx11-dev \
+	libx11-xcb-dev \
+	libxext-dev \
+	libxfixes-dev \
+	libxi-dev \
+	libxrender-dev \
+	libxcb1-dev \
+	libxcb-cursor-dev \
+	libxcb-glx0-dev \
 	libxcb-keysyms1-dev \
-	libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev libxcb-sync-dev \
-	libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev \
-	libxcb-render-util0-dev libxcb-xkb-dev libxcb-xinput-dev libxcb-cursor-dev libkrb5-dev\
-	python3-setuptools python3-mako \
-	python3-venv
+	libxcb-image0-dev \
+	libxcb-shm0-dev \
+	libxcb-icccm4-dev \
+	libxcb-sync-dev \
+	libxcb-xfixes0-dev \
+	libxcb-shape0-dev \
+	libxcb-randr0-dev \
+	libxcb-render-util0-dev \
+	libxcb-util-dev \
+	libxcb-xinerama0-dev \
+	libxcb-xkb-dev \
+	libxkbcommon-dev \
+	libxkbcommon-x11-dev \
+	libclang-dev \
+	libgl1-mesa-dev \
+	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
+FROM qt-environment as building
 
-# aqt
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
-    git \
-    cmake \
-    python3 \
-    python3-pip \
-    build-essential \
-    libdbus-1-3 \
-    libpulse-mainloop-glib0 \
-	nodejs \
-	libnode72 \
-	clang \
-	llvm
+COPY qt-everywhere-src-6.6.1.tar.xz /source/qt-everywhere-src-6.6.1.tar.xz
+RUN mkdir -p /Qt6/Src /Qt6/Build
+RUN tar xvfp /source/qt-everywhere-src-6.6.1.tar.xz -C /Qt6/Src --strip-components=1
 
-RUN pip3 install aqtinstall
+RUN cd /Qt6/Build \
+	&& /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests \
+	&& cmake --build . --parallel $(nproc) \
+	&& cmake --install .
 
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-ENV ANDROID_SDK_ROOT=/opt/android-sdk
-ENV ANDROID_NDK_ROOT=/opt/android-sdk/ndk/25.1.8937393
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+RUN tar cvfpJ /export/Qt6-$TARGETARCH.tar.xz -C /opt/Qt6 .
 
-# Cleanup
-RUN \
-    apt-get -y autoremove && \
-    apt-get -y autoclean && \
-    apt-get -y clean && \
-    rm -rf /var/lib/apt/lists/*
-
-COPY build_qt6_amd64.sh /build_qt6_amd64.sh
-COPY build_qt6_arm64.sh /build_qt6_arm64.sh
-RUN chmod +x /build_qt6_amd64.sh
-RUN chmod +x /build_qt6_arm64.sh
+FROM scratch as artifact
+COPY --from=building /export/Qt6-$TARGETARCH.tar.xz /Qt6-$TARGETARCH.tar.xz
