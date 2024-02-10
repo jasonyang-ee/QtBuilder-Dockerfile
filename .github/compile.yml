@@ -78,3 +78,6 @@ jobs:
           files: |
             build/linux_amd64/Qt-amd64.tar.xz
             build/linux_arm64/Qt-arm64.tar.xz
+
+      - name: Cleanup Folders
+        run: rm -r ${{ github.workspace }}/build*
