@@ -13,9 +13,22 @@ BuilderQt is a Docker container for building Qt source code for both amd64 and a
   
 	It will produce an output to the `build` folder.
 
-	> Example Command
+	> Help Command
 	```bash
-	./BuilderQt.sh -h
+	./BuilderQt.sh --help
+	```
+	```bash
+	Usage: BuilderQt.sh [OPTIONS]
+	Options:
+		-h, --help                Show this help message and exit
+
+		-v, --version <VERSION>   Overwrite the version of Qt to build
+									[Avalible: 6.6.1, 6.5.3, 6.2.7]
+									[Default:  6.6.1]
+	```
+
+	> Build Qt 6.6.1
+	```bash
 	./BuilderQt.sh -v 6.6.1
 	```
 
