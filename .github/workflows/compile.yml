@@ -25,7 +25,7 @@ jobs:
 
     strategy:
       matrix:
-        versions: [6.6.1, 6.5.3, 6.2.7]
+        versions: [6.6.1, 6.5.3]
     
     steps:
       - name: Checkout Project
