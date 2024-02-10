@@ -49,7 +49,7 @@ fi
 # Build Qt Builder Image
 if [[ "$VERSION" = "6.6.1" ]] || [[ "$VERSION" = "6.5.3" ]] || [[ "$VERSION" = "6.2.7" ]]; then
 	echo "Compiling Qt Version $VERSION"
-	docker buildx build --target=artifact --output type=local,dest=$(pwd)/build/ --platform linux/amd64,linux/arm64 -t qt-builder:latest --build-arg VERSION=${VERSION} --load ./BuilderQt
+	docker buildx build --target=artifact --output type=local,dest=$(pwd)/build-${VERSION}/ --platform linux/amd64,linux/arm64 -t qt-builder:latest --build-arg VERSION=${VERSION} --load ./BuilderQt
 else
 	echo "Invalid Version"
 fi
