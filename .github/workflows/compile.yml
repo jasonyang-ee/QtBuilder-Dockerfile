@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - '*'
+  workflow_dispatch:
 
 jobs:
   Skip_Checking:
@@ -65,7 +66,7 @@ jobs:
           context: ./BuilderQt
           platforms: linux/amd64,linux/arm64
           target: artifact
-          output: type=local,dest={{ github.workspace }}/build
+          output: type=local,dest={{ github.workspace }}/build-${{ matrix.versions }}
           build-args: VERSION=${{ matrix.versions }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -76,8 +77,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            build/linux_amd64/Qt-amd64.tar.xz
-            build/linux_arm64/Qt-arm64.tar.xz
+            build-${{ matrix.versions }}/linux_amd64/Qt-amd64.tar.xz
+            build-${{ matrix.versions }}/linux_arm64/Qt-arm64.tar.xz
 
       - name: Cleanup Folders
         run: rm -r ${{ github.workspace }}/build*
