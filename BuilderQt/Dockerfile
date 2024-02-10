@@ -51,7 +51,6 @@ RUN mkdir -p /Qt6/Src /Qt6/Build /export /source
 RUN \
 	if [ "$VERSION" = "6.6.1" ]; then curl -L -o /source/qt.tar.xz https://download.qt.io/official_releases/qt/6.6/6.6.1/single/qt-everywhere-src-6.6.1.tar.xz; \
 	elif [ "$VERSION" = "6.5.3" ]; then curl -L -o /source/qt.tar.xz https://download.qt.io/official_releases/qt/6.5/6.5.3/single/qt-everywhere-src-6.5.3.tar.xz; \
-	elif [ "$VERSION" = "6.2.7" ]; then curl -L -o /source/qt.tar.xz https://download.qt.io/official_releases/qt/6.2/6.2.7/single/qt-everywhere-opensource-src-6.2.7.tar.xz; \
 	fi
 
 RUN tar xvfp /source/qt.tar.xz -C /Qt6/Src --strip-components=1

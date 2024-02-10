@@ -28,6 +28,13 @@ jobs:
         versions: [6.6.1, 6.5.3]
     
     steps:
+      - name: Cleanup build folder
+        run: |
+          ls -la ./
+          rm -rf ./* || true
+          rm -rf ./.??* || true
+          ls -la ./
+
       - name: Checkout Project
         uses: actions/checkout@v3
 
