@@ -1,9 +1,11 @@
 FROM debian:bookworm as qt-environment
 
 ARG TARGETARCH
+ARG VERSION
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	git \
+	curl \
 	xz-utils \
 	cmake \
 	ninja-build \
@@ -40,18 +42,32 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	libgl1-mesa-dev \
 	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
-FROM qt-environment as building
 
-COPY qt-everywhere-src-6.6.1.tar.xz /source/qt-everywhere-src-6.6.1.tar.xz
-RUN mkdir -p /Qt6/Src /Qt6/Build
-RUN tar xvfp /source/qt-everywhere-src-6.6.1.tar.xz -C /Qt6/Src --strip-components=1
 
-RUN cd /Qt6/Build \
-	&& /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests \
-	&& cmake --build . --parallel $(nproc) \
-	&& cmake --install .
+FROM qt-environment as download
+
+RUN mkdir -p /Qt6/Src /Qt6/Build /export /source
+
+RUN \
+	if [ "$VERSION" = "6.6.1" ]; then curl -L -o /source/qt.tar.xz https://download.qt.io/official_releases/qt/6.6/6.6.1/single/qt-everywhere-src-6.6.1.tar.xz; \
+	elif [ "$VERSION" = "6.5.3" ]; then curl -L -o /source/qt.tar.xz https://download.qt.io/official_releases/qt/6.5/6.5.3/single/qt-everywhere-src-6.5.3.tar.xz; \
+	elif [ "$VERSION" = "6.2.7" ]; then curl -L -o /source/qt.tar.xz https://download.qt.io/official_releases/qt/6.2/6.2.7/single/qt-everywhere-opensource-src-6.2.7.tar.xz; \
+	fi
+
+RUN tar xvfp /source/qt.tar.xz -C /Qt6/Src --strip-components=1
+
+
+
+FROM download as building
+
+WORKDIR /Qt6/Build
+RUN /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests
+RUN cmake --build . --parallel $(nproc)
+RUN cmake --install .
 
 RUN tar cvfpJ /export/Qt6-$TARGETARCH.tar.xz -C /opt/Qt6 .
 
+
+
 FROM scratch as artifact
-COPY --from=building /export/Qt6-$TARGETARCH.tar.xz /Qt6-$TARGETARCH.tar.xz
+COPY --from=building /export /
