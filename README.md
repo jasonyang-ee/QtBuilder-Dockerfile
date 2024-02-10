@@ -23,7 +23,7 @@ BuilderQt is a Docker container for building Qt source code for both amd64 and a
         -h, --help                Show this help message and exit
 
         -v, --version <VERSION>   Overwrite the version of Qt to build
-                                  [Avalible: 6.6.1, 6.5.3, 6.2.7]
+                                  [Avalible: 6.6.1, 6.5.3]
                                   [Default:  6.6.1]
 	```
 
