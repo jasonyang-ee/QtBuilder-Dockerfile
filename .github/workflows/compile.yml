@@ -23,7 +23,10 @@ jobs:
       contents: read
       packages: write
 
+    timeout-minutes: 600
+
     strategy:
+      fail-fast: false
       matrix:
         versions: [6.6.1, 6.5.3]
     
