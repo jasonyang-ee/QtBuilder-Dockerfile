@@ -72,9 +72,20 @@ jobs:
         with:
           context: ./BuilderQt
           platforms: linux/amd64,linux/arm64
-          target: artifact
-          outputs: type=local,dest={{ github.workspace }}/build-${{ matrix.versions }}
           build-args: VERSION=${{ matrix.versions }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and Load
+        id: build3x
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BuilderQt
+          platforms: linux/amd64,linux/arm64
+          target: artifact
+          build-args: VERSION=${{ matrix.versions }}
+          outputs: type=local,dest={{ github.workspace }}/build-${{ matrix.versions }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
