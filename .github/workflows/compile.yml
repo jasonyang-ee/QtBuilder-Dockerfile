@@ -73,7 +73,7 @@ jobs:
           context: ./BuilderQt
           platforms: linux/amd64,linux/arm64
           target: artifact
-          output: type=local,dest={{ github.workspace }}/build-${{ matrix.versions }}
+          outputs: type=local,dest={{ github.workspace }}/build-${{ matrix.versions }}
           build-args: VERSION=${{ matrix.versions }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
