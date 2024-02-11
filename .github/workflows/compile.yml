@@ -23,7 +23,7 @@ jobs:
       contents: read
       packages: write
 
-    timeout-minutes: 600
+    timeout-minutes: 6000
 
     strategy:
       fail-fast: false

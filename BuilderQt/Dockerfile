@@ -38,11 +38,18 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	libxcb-xkb-dev \
 	libxkbcommon-dev \
 	libxkbcommon-x11-dev \
-	libclang-dev \
 	libgl1-mesa-dev \
+	libfontconfig1 \
+	libxkbcommon0 \
+	libgl1 \
+	libpng16-16 \
+	libfreetype6 \
+	libwayland-* \
+	python3-html5lib \
+	libclang-dev \
 	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
-
+ENV LLVM_INSTALL_DIR="/usr/llvm"
 
 FROM qt-environment as download
 
