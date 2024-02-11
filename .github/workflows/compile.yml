@@ -75,7 +75,6 @@ jobs:
           target: artifact
           outputs: type=local,dest={{ github.workspace }}/build-${{ matrix.versions }}
           build-args: VERSION=${{ matrix.versions }}
-          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
