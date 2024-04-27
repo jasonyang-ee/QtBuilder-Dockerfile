@@ -20,14 +20,13 @@ BuilderQt is a Docker container for building Qt source code for both amd64 and a
 	Options:
         -h, --help                Show this help message and exit
 
-		-v, --version             No version specified, list all available versions
+        -v, --version             No version specified, list all available versions
 
         -v, --version <VERSION>   Specify the version of Qt to build
 
-		-b, --build <BUILD_TYPE>  Build the Qt Builder image
+        -b, --build               Build the Qt Builder image
 
-		-p, --push <BUILD_TYPE>   Push the Qt Builder image to the registry
-                                  
+        -p, --push                Push the Qt Builder image to the registry
 	```
 
 	> Example of building Qt 6.6.3
@@ -46,7 +45,7 @@ It require docker buildx setup with using docker-container driver.
 
 
 
-## Folders Created on the build
+## Folders Created on the Build
 
 | Folder | Description |
 | ------ | ----------- |
