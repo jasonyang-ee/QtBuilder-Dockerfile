@@ -55,16 +55,16 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 
 ENV LLVM_INSTALL_DIR="/usr/llvm"
 
+
+
+
 FROM qt-environment as download
 
 RUN mkdir -p /Qt6/Src /Qt6/Build /Qt6/Build-arm64 /export /source
-
-RUN \
-	if [ "$VERSION" = "6.6.1" ]; then curl -L -o /source/qt.tar.xz https://download.qt.io/official_releases/qt/6.6/6.6.1/single/qt-everywhere-src-6.6.1.tar.xz; \
-	elif [ "$VERSION" = "6.5.3" ]; then curl -L -o /source/qt.tar.xz https://download.qt.io/official_releases/qt/6.5/6.5.3/single/qt-everywhere-src-6.5.3.tar.xz; \
-	fi
+COPY src/qt-everywhere-src-$VERSION.tar.xz /source/qt.tar.xz
 
 RUN tar xvfp /source/qt.tar.xz -C /Qt6/Src --strip-components=1
+RUN rm -rf /source
 
 
 
@@ -77,11 +77,6 @@ RUN cmake --install .
 
 RUN tar cvfpJ /export/Qt6-$TARGETARCH.tar.xz -C /opt/Qt6 .
 
-
-# FROM building as building-arm64
-
-# WORKDIR /Qt6/Build-arm64
-# RUN /Qt6/Src/configure -qt-host-path /opt/Qt6 -prefix /opt/Qt6-arm64 -DCMAKE_TOOLCHAIN_FILE=/source/toolchain.cmake -DQT_BUILD_TOOLS_WHEN_CROSSCOMPILING=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=/opt/Qt6-arm64
 
 
 FROM scratch as artifact

@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        versions: [6.6.1, 6.5.3]
+        versions: [6.6.3, 6.5.3]
     
     steps:
       - name: Cleanup build folder

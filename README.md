@@ -23,8 +23,8 @@ BuilderQt is a Docker container for building Qt source code for both amd64 and a
         -h, --help                Show this help message and exit
 
         -v, --version <VERSION>   Overwrite the version of Qt to build
-                                  [Avalible: 6.6.1, 6.5.3]
-                                  [Default:  6.6.1]
+                                  [Avalible: 6.6.3, 6.5.3]
+                                  [Default:  6.6.3]
 	```
 
 	> Build Qt 6.6.1
@@ -34,4 +34,4 @@ BuilderQt is a Docker container for building Qt source code for both amd64 and a
 
 ## Cautions
 
-Building Qt is resource intensive. It is recommended to have at least 8GB of RAM and 4 CPU cores for building Qt. Otherwise, the build process may fail.
+Building Qt is resource intensive. It is recommended to have at least 32GB of RAM and 20 logical CPU cores for building Qt.

@@ -32,9 +32,8 @@ RUN apt-get -y autoremove \
 	&& apt-get -y clean \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV PATH="${PATH}:/opt/Qt-$TARGETPLATFORM-$QTVER/bin:/opt/Qt-$TARGETPLATFORM-$QTVER/libexec"
-ENV QT_HOST_PATH="/opt/Qt-$TARGETPLATFORM-$QTVER/"
-ENV QT_PLUGIN_PATH="/opt/Qt-$TARGETPLATFORM-$QTVER/plugins"
+ENV PATH="${PATH}:/opt/Qt-$TARGETPLATFORM-$QTVER"
+ENV QT_DIR="/opt/Qt-$TARGETPLATFORM-$QTVER/"
 
 
 
@@ -44,4 +43,5 @@ FROM QtEnvironment as DevEnvironment
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
     apt-utils curl nano git cmake build-essential ninja-build \
 	libwayland-client0 libwayland-server0 libglx-mesa0 mesa-utils-extra libegl1 libgles2 libgles-dev \
+	libxcb-cursor0 \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
