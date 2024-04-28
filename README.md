@@ -40,7 +40,7 @@ It require docker buildx setup with using docker-container driver.
 
         -v, --version <VERSION>     Specify the version of Qt to build
 
-		-r, --registry <REGISTRY>   Set the registry as prefix for image name
+        -r, --registry <REGISTRY>   Set the registry as prefix for image name
 
         -b, --build                 Build the Qt Builder image
 
