@@ -1,0 +1,56 @@
+FROM debian:bookworm
+
+ARG TARGETARCH
+ARG VERSION
+
+RUN apt-get -y update && apt-get install -y --no-install-recommends \
+    apt-utils curl nano git cmake build-essential ninja-build ca-certificates\
+	libwayland-client0 libwayland-server0 libglx-mesa0 mesa-utils-extra \
+	libegl1 libgles2 libgles-dev libxcb-cursor0 \
+	libfontconfig-dev libopengl-dev libpng-dev libfreetype-dev libxkbcommon-dev
+
+COPY build-$VERSION/linux_$TARGETARCH/Qt6-$TARGETARCH.tar.xz /import/
+
+RUN mkdir -p /opt/Qt6
+RUN tar xvfp /import/Qt6-$TARGETARCH.tar.xz -C /opt/Qt6
+RUN rm /import/Qt6-$TARGETARCH.tar.xz
+
+RUN echo "/opt/Qt6/lib" >> /etc/ld.so.conf && ldconfig
+ENV PATH="${PATH}:/opt/Qt6"
+ENV QT_DIR="/opt/Qt6"
+
+
+RUN apt-get -y autoremove \
+	&& apt-get -y autoclean \
+	&& apt-get -y clean \
+	&& rm -rf /var/lib/apt/lists/*
+
+
+
+
+
+ENV QT_QPA_PLATFORM="wayland"
+ENV QT_QPA_FONTDIR="/usr/share/fonts/truetype/"
+ENV DISPLAY=":0"
+ENV WAYLAND_DISPLAY="wayland-0"
+ENV XDG_RUNTIME_DIR="/tmp"
+
+# Install hiredis from source
+RUN mkdir -p /home/libraries && cd /home/libraries \
+	&& git clone https://github.com/redis/hiredis.git \
+	&& cd hiredis \
+	&& make \
+	&& make install
+
+# Install redis-plus-plus from source
+RUN cd /home/libraries \
+	&& git clone https://github.com/sewenew/redis-plus-plus.git \
+	&& cd redis-plus-plus \
+	&& mkdir build \
+	&& cd build \
+	&& cmake .. \
+	&& make \
+	&& make install
+
+# Include the library for cmake to find
+RUN echo "/usr/local/lib" >> /etc/ld.so.conf && ldconfig

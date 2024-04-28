@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Default values
-VERSION=6.6.1
-
 # Parse arguments
 POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
@@ -14,13 +11,25 @@ while [[ $# -gt 0 ]]; do
 	-v | --version)
 		# Check if has argument value
 		if [[ -z "$2" ]] || [[ "$2" =~ ^-+ ]]; then
-			shift # past argument
+			echo "No version specified" >&2
+			exit 1
 		else
 			VERSION="$2"
 			shift # past argument
 			shift # past value
 		fi
 		echo "Using $VOLUME as volume mount point"
+		;;
+	-r | --registry)
+		# Check if has argument value
+		if [[ -z "$2" ]]; then
+			echo "No registry specified" >&2
+			exit 1
+		else
+			REGISTRY="$2"
+			shift # past argument
+			shift # past value
+		fi
 		;;
 	-* | --*=) # unsupported argument
 		echo "Unsupported argument '$1'" >&2
@@ -36,25 +45,31 @@ if [[ $HELP == true ]]; then
 	echo "Options:"
 	echo "  -h, --help                Show this help message and exit"
 	echo ""
-	echo "  -v, --version <VERSION>   Overwrite the version of Qt to build"
-	echo "                            [default: 6.6.1]"
+	echo "  -v, --version <VERSION>   Set the version of Qt to use for dev environment"
 	echo ""
+	echo "  -r, --registry <REGISTRY>  Set the registry as prefix for image name"
 	exit 0
 fi
 
-# Disable the POSIX path conversion in Git Bash (MinGW) 
-export MSYS_NO_PATHCONV=1
+if [ ! -d "build-$VERSION" ]; then
+	echo "Qt Version $VERSION not found" >&2
+	exit 1
+fi
 
-# Native AMD64 Build using the Qt Builder Image
-docker run --rm -v ${PWD}/build:/root/export qt-builder:6 /build_qt6_amd64.sh $VERSION
+if [ -z "$VERSION" ]; then
+	echo "No version specified" >&2
+	exit 1
+fi
 
-# Cross ARM64 Build using the Qt Builder Image
-docker run --rm -v ${PWD}/build:/root/export qt-builder:6 /build_qt6_arm64.sh $VERSION
+if [ -z "$REGISTRY" ]; then
+	echo "No registry specified" >&2
+	exit 1
+fi
 
 # Build Qt Developer Image using the compiled Qt
 docker buildx build \
+	--load \
 	--platform linux/amd64,linux/arm64 \
-	--build-arg QTVER=$VERSION \
-	-t qt-dev:$VERSION \
-	-f ./QtDev/Dockerfile.dev \
-	./QtDev
+	--build-arg VERSION=$VERSION \
+	-t $REGISTRY/qt-dev:$VERSION \
+	-f Dockerfile.dev .

@@ -60,9 +60,8 @@ ENV LLVM_INSTALL_DIR="/usr/llvm"
 
 FROM qt-environment as download
 
-RUN mkdir -p /Qt6/Src /Qt6/Build /Qt6/Build-arm64 /export /source
+RUN mkdir -p /Qt6/Src /Qt6/Build /export /source
 COPY src/qt-everywhere-src-$VERSION.tar.xz /source/qt.tar.xz
-
 RUN tar xvfp /source/qt.tar.xz -C /Qt6/Src --strip-components=1
 RUN rm -rf /source
 
