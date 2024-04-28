@@ -35,7 +35,7 @@ while [[ $# -gt 0 ]]; do
 			echo "No registry specified" >&2
 			exit 1
 		else
-			REGISTRY="$2"
+			REGISTRY="$2/"
 			shift # past argument
 			shift # past value
 		fi
@@ -90,50 +90,58 @@ FULL_VERSIONS=""
 MAJOR_VERSIONS=$(curl -s https://download.qt.io/official_releases/qt/ | grep -oE 'href="[[:digit:]]{1,3}.[[:digit:]]{1,3}' | sed 's/href="//')
 
 for ITEMS in $MAJOR_VERSIONS; do
-	FULL_VERSIONS+=$(curl -s https://download.qt.io/official_releases/qt/${ITEMS}/ | grep -oE 'href="[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}' | sed 's/href="//')
+	FULL_VERSIONS+=$(curl -s https://download.qt.io/official_releases/qt/$ITEMS/ | grep -oE 'href="[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}' | sed 's/href="//')
 	FULL_VERSIONS+=" "     # Add a seperation between major versions
 done
 
 # If no version is specified, list all available versions
-if [[ -z "${VERSION}" ]]; then
+if [[ -z "$VERSION" ]]; then
 	echo "Avaliable versions:"
-	echo ${FULL_VERSIONS}
+	echo $FULL_VERSIONS
 	exit 0
 fi
 
 # Check if VERSION is in FULL_VERSIONS
-if [[ ! "${FULL_VERSIONS[@]}" =~ "${VERSION}" ]]; then
+if [[ ! "${FULL_VERSIONS[@]}" =~ "$VERSION" ]]; then
 	echo "Unsupported version '$VERSION'" >&2
 	echo "See '--help' for more information"
 	exit 1
 fi
 
 # Check if src folder NOT contains the file with the version
-if [ ! -f "src/qt-everywhere-src-${VERSION}.tar.xz" ]; then
+if [ ! -f "src/qt-everywhere-src-$VERSION.tar.xz" ]; then
 	echo "Downloading Qt-Everywhere version $VERSION"
 	MAJOR_VERSION=$(echo $VERSION | cut -d. -f1,2)
-	curl -L https://download.qt.io/official_releases/qt/${MAJOR_VERSION}/${VERSION}/single/qt-everywhere-src-${VERSION}.tar.xz -o src/qt-everywhere-src-${VERSION}.tar.xz
+	curl -L https://download.qt.io/official_releases/qt/$MAJOR_VERSION/$VERSION/single/qt-everywhere-src-$VERSION.tar.xz -o src/qt-everywhere-src-$VERSION.tar.xz
 fi
 
 
 
 # Build Qt Builder Image
-if [[ ${BUILD} == true ]]; then
+if [[ $BUILD == true ]]; then
     docker buildx build \
-		--target=artifact --output type=local,dest=$(pwd)/build-${VERSION}/ \
-		--platform ${TARGET} \
-		--build-arg VERSION=${VERSION} \
+		--target=artifact --output type=local,dest=$(pwd)/build-$VERSION/ \
+		--platform $TARGET \
+		--build-arg VERSION=$VERSION \
 		--cache-from=type=local,src=$(pwd)/cache/ --cache-to=type=local,dest=$(pwd)/cache/,mode=max \
 		-f Dockerfile.builder .
+
+	# if target contains , for each subfolder in build-$VERSION, move the file up one folder
+	if [[ $TARGET == *","* ]]; then
+		for FOLDER in $(ls build-$VERSION); do
+			mv build-$VERSION/$FOLDER/* build-$VERSION/
+			rm -r build-$VERSION/$FOLDER
+		done
+	fi
 fi
 
 # Push Qt Builder Image
-if [[ ${LOAD} == true ]]; then
+if [[ $LOAD == true ]]; then
     docker buildx build \
 	--target=building --load \
 	--platform $TARGET \
-	-t ${REGISTRY}/qt-builder:${VERSION} \
-	--build-arg VERSION=${VERSION} \
+	-t ${REGISTRY}qt-builder:$VERSION \
+	--build-arg VERSION=$VERSION \
 	--cache-from=type=local,src=$(pwd)/cache/ --cache-to=type=local,dest=$(pwd)/cache/,mode=max \
 	-f Dockerfile.builder .
 fi
