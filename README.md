@@ -6,7 +6,9 @@
 
 `dev.sh` will create a docker image containing Qt library that can be used to build Qt applications.
 
-Both scripts will build for both linux amd64 and arm64 architecture.
+The main goal of this project is to build Qt for ARM64 architecture.
+
+Both scripts will build for linux AMD64 and ARM64 architecture by default.
 
 
 
@@ -45,6 +47,10 @@ It require docker buildx setup with using docker-container driver.
         -b, --build                 Build the Qt Builder image
 
         -p, --push                  Push the Qt Builder image to the registry
+
+        -t, --target <TARGET>       Override the target platform for the image
+                                    Format follows the docker buildx platform format
+	                                [Default: linux/amd64,linux/arm64]
 	```
 
 	> Example of building Qt 6.6.3
@@ -73,6 +79,10 @@ It require docker buildx setup with using docker-container driver.
 		-b, --build                 Build the Qt Development image
 
 		-p, --push                  Push the Qt Development image to the registry
+
+        -t, --target <TARGET>       Override the target platform for the image
+                                    Format follows the docker buildx platform format
+	                                [Default: linux/amd64,linux/arm64]
 	```
 
 	> Example of making and pushing Qt 6.6.3 development image to the registry
@@ -89,12 +99,6 @@ It require docker buildx setup with using docker-container driver.
 | `build` | Contains compiled Qt library. |
 | `src` | Contains downloaded Qt source code. |
 | `cache` | Contains docker builderx cache. |
-
-
-
-## Cautions
-
-Building Qt is resource intensive. It is recommended to have at least **32GB of RAM** and **20 logical CPU cores**.
 
 
 
@@ -127,6 +131,29 @@ To start GUI application in docker container, you need to have the following set
 
 `eglfs` is used as default. Change this in the `Dockerfile.dev` if you want to use another platform.
 
+
+
+## Cautions
+
+Building Qt for ARM64 is the true intend of this project.
+
+However, building Qt for ARM64 is resource intensive due to the cross-compilation process.
+
+It is recommended to have at least **24GB of RAM** and **20 logical CPU cores**.
+
+
+## Alternative
+
+If you don't have the computer resource to do this. Move to use the online-installer from Qt.
+
+https://doc.qt.io/qt-6/get-and-install-qt-cli.html
+
+https://download.qt.io/official_releases/online_installers/
+
+
+```bash
+./qt-unified-linux-arm64-online.run install --accept-licenses --accept-messages --accept-obligations --confirm-command --email {qt-account-email} --pw {qt-account-pass} --root /opt/Qt6 qt.qt6.670.src qt.qt6.670.linux_gcc_arm64 qt.qt6.670.addons.qtmultimedia qt.qt6.670.addons.qtserialport qt.qt6.670.debug_info qt.qt6.670.addons.qtcharts qt.qt6.670.qtwaylandcompositor qt.qt6.670.addons qt.qt6.670.debug_info
+```
 
 
 ## Common Error
