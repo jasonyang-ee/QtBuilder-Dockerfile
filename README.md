@@ -46,7 +46,7 @@ It require docker buildx setup with using docker-container driver.
 
         -b, --build                 Build the Qt Builder image
 
-        -p, --push                  Push the Qt Builder image to the registry
+        -l, --load                  Save the build result into docker image (--output=type=docker)
 
         -t, --target <TARGET>       Override the target platform for the image
                                     Format follows the docker buildx platform format
