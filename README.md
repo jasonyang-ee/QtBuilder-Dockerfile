@@ -70,15 +70,15 @@ It require docker buildx setup with using docker-container driver.
 	```bash
 	Usage: dev.sh [OPTIONS]
 	Options:
-		-h, --help                  Show this help message and exit
+        -h, --help                  Show this help message and exit
 
-		-v, --version <VERSION>     Specify the version of Qt to build
+        -v, --version <VERSION>     Specify the version of Qt to build
 
-		-r, --registry <REGISTRY>   Set the registry as prefix for image name
+        -r, --registry <REGISTRY>   Set the registry as prefix for image name
 
-		-b, --build                 Build the Qt Development image
+        -b, --build                 Build the Qt Development image
 
-		-p, --push                  Push the Qt Development image to the registry
+        -p, --push                  Push the Qt Development image to the registry
 
         -t, --target <TARGET>       Override the target platform for the image
                                     Format follows the docker buildx platform format
