@@ -6,6 +6,8 @@
 
 `dev.sh` will create a docker image containing Qt library that can be used to build Qt applications.
 
+Both scripts will build for both linux amd64 and arm64 architecture.
+
 
 
 ## Requirement
