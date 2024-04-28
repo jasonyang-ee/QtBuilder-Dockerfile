@@ -105,24 +105,21 @@ The following example will focus on using RaspberryOS as the target device OS.
 
 To start GUI application in docker container, you need to have the following setup:
 
-1. Install `xhost` on the host machine.
+1. Allow the docker container to access X server on host machine.
 	```bash
-	sudo apt install x11-xserver-utils
-	```
-
-2. Allow the docker container to access the host X server.
-	```bash
-	xhost +local:
+	host-machine> xhost +local:
 	```
 	```bash
 	# if running in ssh session
-	export DISPLAY=:0
+	host-machine> export DISPLAY=:0
 	```
 
-3. Run the docker container with forwarding `DISPLAY env` and volume bind `x11 socket`.
+2. Run the docker container with forwarding `DISPLAY env` and volume bind `x11 socket`.
 	```bash
-	docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /app:/app <image_name>
+	docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix <image_name>
+	# import your application volume here if not using this as base image to build your application custom image
 	```
+
 
 
 
