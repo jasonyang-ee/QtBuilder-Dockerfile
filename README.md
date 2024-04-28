@@ -95,3 +95,37 @@ It require docker buildx setup with using docker-container driver.
 ## Cautions
 
 Building Qt is resource intensive. It is recommended to have at least **32GB of RAM** and **20 logical CPU cores**.
+
+
+
+
+## Developer of GUI Application
+
+The following example will focus on using RaspberryOS as the target device OS.
+
+To start GUI application in docker container, you need to have the following setup:
+
+1. Install `xhost` on the host machine.
+	```bash
+	sudo apt install x11-xserver-utils
+	```
+
+2. Allow the docker container to access the host X server.
+	```bash
+	xhost +local:
+	```
+	```bash
+	# if running in ssh session
+	export DISPLAY=:0
+	```
+
+3. Run the docker container with forwarding `DISPLAY env` and volume bind `x11 socket`.
+	```bash
+	docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /app:/app <image_name>
+	```
+
+
+
+## ENV QT_QPA_PLATFORM=eglfs
+
+`eglfs` is used as default. Change this in the `Dockerfile.dev` if you want to use another platform.

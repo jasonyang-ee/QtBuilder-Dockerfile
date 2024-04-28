@@ -19,3 +19,35 @@ RUN echo "/opt/Qt6/lib" >> /etc/ld.so.conf && ldconfig
 ENV PATH="${PATH}:/opt/Qt6"
 ENV QT_DIR="/opt/Qt6"
 ENV QT_PLUGIN_PATH="/opt/Qt6/plugins"
+# Set the default display server for Raspberry Pi. Use "wayland" if there is a need.
+ENV QT_QPA_PLATFORM=eglfs
+
+RUN apt-get -y autoremove \
+	&& apt-get -y autoclean \
+	&& apt-get -y clean \
+	&& rm -rf /var/lib/apt/lists/*
+
+
+
+# Personal Needs..
+# Install hiredis from source
+RUN mkdir -p /home/libraries && cd /home/libraries \
+	&& git clone https://github.com/redis/hiredis.git \
+	&& cd hiredis \
+	&& make \
+	&& make install
+
+# Install redis-plus-plus from source
+RUN cd /home/libraries \
+	&& git clone https://github.com/sewenew/redis-plus-plus.git \
+	&& cd redis-plus-plus \
+	&& mkdir build \
+	&& cd build \
+	&& cmake .. \
+	&& make \
+	&& make install
+	
+# Include the library for cmake to find
+RUN echo "/usr/local/lib" >> /etc/ld.so.conf && ldconfig
+
+RUN rm -rf /home/libraries
