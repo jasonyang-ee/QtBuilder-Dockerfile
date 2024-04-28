@@ -2,9 +2,9 @@
 
 # Docker Container to Build Qt From Source
 
-`build.sh` will invoke a docker container to build Qt from source. The output of `build.sh` is compiled Qt library as tarball.
+`build.sh` will invoke a docker container to build Qt from source. The output is compiled Qt library as tarball.
 
-`dev.sh` will create a docker image that contains Qt library and development tools. It can be used to build Qt applications.
+`dev.sh` will create a docker image containing Qt library that can be used to build Qt applications.
 
 
 
