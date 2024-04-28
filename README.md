@@ -88,4 +88,4 @@ It require docker buildx setup with using docker-container driver.
 
 ## Cautions
 
-Building Qt is resource intensive. It is recommended to have at least **32GB of RAM** and **20 logical CPU cores** for building Qt.
+Building Qt is resource intensive. It is recommended to have at least **32GB of RAM** and **20 logical CPU cores**.
