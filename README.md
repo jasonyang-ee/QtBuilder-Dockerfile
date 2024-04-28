@@ -34,15 +34,17 @@ It require docker buildx setup with using docker-container driver.
 	```bash
 	Usage: build.sh [OPTIONS]
 	Options:
-        -h, --help                Show this help message and exit
+        -h, --help                  Show this help message and exit
 
-        -v, --version             No version specified, list all available versions
+        -v, --version               List all available versions when no version specified
 
-        -v, --version <VERSION>   Specify the version of Qt to build
+        -v, --version <VERSION>     Specify the version of Qt to build
 
-        -b, --build               Build the Qt Builder image
+		-r, --registry <REGISTRY>   Set the registry as prefix for image name
 
-        -p, --push                Push the Qt Builder image to the registry
+        -b, --build                 Build the Qt Builder image
+
+        -p, --push                  Push the Qt Builder image to the registry
 	```
 
 	> Example of building Qt 6.6.3
@@ -62,18 +64,20 @@ It require docker buildx setup with using docker-container driver.
 	```bash
 	Usage: dev.sh [OPTIONS]
 	Options:
-		-h, --help                Show this help message and exit
+		-h, --help                  Show this help message and exit
 
-		-v, --version <VERSION>   Specify the version of Qt to build
+		-v, --version <VERSION>     Specify the version of Qt to build
 
-		-b, --build               Build the Qt Development image
+		-r, --registry <REGISTRY>   Set the registry as prefix for image name
 
-		-p, --push                Push the Qt Development image to the registry
+		-b, --build                 Build the Qt Development image
+
+		-p, --push                  Push the Qt Development image to the registry
 	```
 
 	> Example of making and pushing Qt 6.6.3 development image to the registry
 	```bash
-	./dev.sh -v 6.6.3 -b -p
+	./dev.sh -v 6.6.3 -b -r jasonyangee -p
 	```
 
 
