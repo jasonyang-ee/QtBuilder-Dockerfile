@@ -53,10 +53,8 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	libclang-dev \
 	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
-ENV LLVM_INSTALL_DIR="/usr/llvm"
 
-
-
+	
 
 FROM qt-environment as download
 
