@@ -1,11 +1,25 @@
 
 
-# Docker Container for Qt Building Environment
+# Docker Container to Build Qt From Source
 
-BuilderQt is a Docker container for building Qt source code for both amd64 and arm64. It will produce a compliled Qt binary and library tar file. In application deployment, extract the tar file to the target system and set the environment variable `QT_DIR` and `PATH` to the extracted folder.
+`build.sh` will invoke a docker container to build Qt from source. The output of `build.sh` is compiled Qt library as tarball.
+
+`dev.sh` will create a docker image that contains Qt library and development tools. It can be used to build Qt applications.
 
 
-## To Use
+
+## Requirement
+
+It require docker buildx setup with using docker-container driver.
+
+[Official Guide on Docker Buildx](https://docs.docker.com/reference/cli/docker/buildx/create/#driver)
+
+![Docker Buildx](docs/img/builder.png)
+
+
+
+
+## To Use `build.sh`
 
 - Build Qt using `build.sh` script.
   
@@ -35,13 +49,30 @@ BuilderQt is a Docker container for building Qt source code for both amd64 and a
 	```
 
 
-## Requirement
+## To Use `dev.sh`
 
-It require docker buildx setup with using docker-container driver.
+- Build Qt development image using `dev.sh` script.
 
-[Official Guide on Docker Buildx](https://docs.docker.com/reference/cli/docker/buildx/create/#driver)
+	> Help Command
+	```bash
+	./dev.sh --help
+	```
+	```bash
+	Usage: dev.sh [OPTIONS]
+	Options:
+		-h, --help                Show this help message and exit
 
-![Docker Buildx](docs/img/builder.png)
+		-v, --version <VERSION>   Specify the version of Qt to build
+
+		-b, --build               Build the Qt Development image
+
+		-p, --push                Push the Qt Development image to the registry
+	```
+
+	> Example of making and pushing Qt 6.6.3 development image to the registry
+	```bash
+	./dev.sh -v 6.6.3 -b -p
+	```
 
 
 

@@ -76,7 +76,7 @@ done
 
 # If no version is specified, list all available versions
 if [[ -z "$VERSION" ]]; then
-	echo "Avaliable Versions:"
+	echo "Avaliable versions:"
 	echo ${FULL_VERSIONS}
 	exit 0
 fi
@@ -90,7 +90,7 @@ fi
 
 # Check if src folder NOT contains the file with the version
 if [ ! -f "src/qt-everywhere-src-${VERSION}.tar.xz" ]; then
-	echo "Downloading Qt Everywhere Version $VERSION"
+	echo "Downloading Qt-Everywhere version $VERSION"
 	MAJOR_VERSION=$(echo $VERSION | cut -d. -f1,2)
 	curl -L https://download.qt.io/official_releases/qt/${MAJOR_VERSION}/${VERSION}/single/qt-everywhere-src-${VERSION}.tar.xz -o src/qt-everywhere-src-${VERSION}.tar.xz
 fi
@@ -99,7 +99,6 @@ fi
 
 # Build Qt Builder Image
 if [[ $BUILD == true ]]; then
-    echo "Compiling Qt Version $VERSION"
     docker buildx build \
 		--target=artifact --output type=local,dest=$(pwd)/build-${VERSION}/ \
 		--platform linux/amd64,linux/arm64 \
