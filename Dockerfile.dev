@@ -18,6 +18,14 @@ RUN rm /import/Qt6-$TARGETARCH.tar.xz
 RUN echo "/opt/Qt6/lib" >> /etc/ld.so.conf && ldconfig
 ENV PATH="${PATH}:/opt/Qt6"
 ENV QT_DIR="/opt/Qt6"
+ENV QT_PLUGIN_PATH="/opt/Qt6/plugins"
+
+ENV QT_QPA_PLATFORM="wayland"
+ENV QT_QPA_PLATFORM_PLUGIN_PATH="/opt/Qt6/plugins"
+ENV QT_QPA_FONTDIR="/usr/share/fonts/truetype/"
+ENV DISPLAY=":0"
+ENV WAYLAND_DISPLAY="wayland-0"
+ENV XDG_RUNTIME_DIR="/tmp"
 
 
 RUN apt-get -y autoremove \
@@ -25,15 +33,6 @@ RUN apt-get -y autoremove \
 	&& apt-get -y clean \
 	&& rm -rf /var/lib/apt/lists/*
 
-
-
-
-
-ENV QT_QPA_PLATFORM="wayland"
-ENV QT_QPA_FONTDIR="/usr/share/fonts/truetype/"
-ENV DISPLAY=":0"
-ENV WAYLAND_DISPLAY="wayland-0"
-ENV XDG_RUNTIME_DIR="/tmp"
 
 # Install hiredis from source
 RUN mkdir -p /home/libraries && cd /home/libraries \
