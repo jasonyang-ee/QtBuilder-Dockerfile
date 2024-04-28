@@ -126,3 +126,11 @@ To start GUI application in docker container, you need to have the following set
 ## ENV QT_QPA_PLATFORM=eglfs
 
 `eglfs` is used as default. Change this in the `Dockerfile.dev` if you want to use another platform.
+
+
+
+## Common Error
+
+```E: Failed to fetch http://xxxx  Unable to connect to deb.debian.org:80: [IP: xxxx]```
+
+Your IP has been timed-out by the debian arm package server. Use VPN to change your IP for the day.
