@@ -73,7 +73,7 @@ RUN cmake --build . --parallel $(nproc)
 RUN cmake --install .
 
 RUN tar cvfpJ /export/Qt6-$TARGETARCH.tar.xz -C /opt/Qt6 .
-
+RUN cp /Qt6/Build/config.summary /export/config.summary
 
 
 FROM scratch as artifact

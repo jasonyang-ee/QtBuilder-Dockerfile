@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Set default values
+TARGET="linux/amd64,linux/arm64"
 
 # Parse arguments
 POSITIONAL_ARGS=()
@@ -23,8 +25,8 @@ while [[ $# -gt 0 ]]; do
 		BUILD=true
 		shift # past argument
 		;;
-	-p | --push)
-		PUSH=true
+	-L | --load)
+		LOAD=true
 		shift # past argument
 		;;
 	-r | --registry)
@@ -34,6 +36,17 @@ while [[ $# -gt 0 ]]; do
 			exit 1
 		else
 			REGISTRY="$2"
+			shift # past argument
+			shift # past value
+		fi
+		;;
+	-t | --target)
+		# Check if has argument value
+		if [[ -z "$2" ]]; then
+			echo "No target specified" >&2
+			exit 1
+		else
+			TARGET="$2"
 			shift # past argument
 			shift # past value
 		fi
@@ -58,9 +71,15 @@ if [[ $HELP == true ]]; then
 	echo ""
 	echo "  -b, --build                Build the Qt Builder image"
 	echo ""
-	echo "  -p, --push                 Push the Qt Builder image to Docker Hub"
+	echo "  -l, --load                 Save the build result into docker image (--output=type=docker)"
+	echo "                             Image is huge, so --load is not default, and --push is not provided"
+	echo "                             You can push the image to registry manually if there is a need"
 	echo ""
 	echo "  -r, --registry <REGISTRY>  Set the registry as prefix for image name"
+	echo ""
+	echo "  -t, --target <TARGET>      Override the target platform for the image"
+	echo "                             Format follows the docker buildx platform format"
+	echo "                             [Default: linux/amd64,linux/arm64]"
 	exit 0
 fi
 
@@ -76,7 +95,7 @@ for ITEMS in $MAJOR_VERSIONS; do
 done
 
 # If no version is specified, list all available versions
-if [[ -z "$VERSION" ]]; then
+if [[ -z "${VERSION}" ]]; then
 	echo "Avaliable versions:"
 	echo ${FULL_VERSIONS}
 	exit 0
@@ -99,20 +118,21 @@ fi
 
 
 # Build Qt Builder Image
-if [[ $BUILD == true ]]; then
+if [[ ${BUILD} == true ]]; then
     docker buildx build \
 		--target=artifact --output type=local,dest=$(pwd)/build-${VERSION}/ \
-		--platform linux/amd64,linux/arm64 \
+		--platform ${TARGET} \
 		--build-arg VERSION=${VERSION} \
 		--cache-from=type=local,src=$(pwd)/cache/ --cache-to=type=local,dest=$(pwd)/cache/,mode=max \
 		-f Dockerfile.builder .
 fi
 
 # Push Qt Builder Image
-if [[ $PUSH == true ]]; then
-    docker buildx build --target=building --push \
-	--platform linux/amd64,linux/arm64 \
-	-t $REGISTRY/qt-builder:${VERSION} \
+if [[ ${LOAD} == true ]]; then
+    docker buildx build \
+	--target=building --load \
+	--platform $TARGET \
+	-t ${REGISTRY}/qt-builder:${VERSION} \
 	--build-arg VERSION=${VERSION} \
 	--cache-from=type=local,src=$(pwd)/cache/ --cache-to=type=local,dest=$(pwd)/cache/,mode=max \
 	-f Dockerfile.builder .

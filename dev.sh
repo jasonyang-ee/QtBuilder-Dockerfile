@@ -94,7 +94,7 @@ fi
 
 
 # Push the Qt Developer Image to Docker Hub
-if [[ $PUSH == true ]]; then
+if [[ $PUSH == true]]; then
 	docker push $REGISTRY/qt-dev:$VERSION
 fi
 
