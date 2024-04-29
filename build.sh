@@ -123,7 +123,6 @@ if [[ $BUILD == true ]]; then
 		--target=artifact --output type=local,dest=$(pwd)/build-$VERSION/ \
 		--platform $TARGET \
 		--build-arg VERSION=$VERSION \
-		--cache-from=type=local,src=$(pwd)/cache/ --cache-to=type=local,dest=$(pwd)/cache/,mode=max \
 		-f Dockerfile.builder .
 
 	# if multi-platform TARGET used, for each subfolder in build-$VERSION, move the compiled file up one folder
@@ -142,7 +141,6 @@ if [[ $LOAD == true ]]; then
 	--platform $TARGET \
 	-t ${REGISTRY}qt-builder:$VERSION \
 	--build-arg VERSION=$VERSION \
-	--cache-from=type=local,src=$(pwd)/cache/ --cache-to=type=local,dest=$(pwd)/cache/,mode=max \
 	-f Dockerfile.builder .
 fi
 
