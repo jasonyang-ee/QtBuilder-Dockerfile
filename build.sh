@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
 		BUILD=true
 		shift # past argument
 		;;
-	-L | --load)
+	-l | --load)
 		LOAD=true
 		shift # past argument
 		;;
