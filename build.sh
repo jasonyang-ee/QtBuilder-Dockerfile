@@ -126,7 +126,7 @@ if [[ $BUILD == true ]]; then
 		--cache-from=type=local,src=$(pwd)/cache/ --cache-to=type=local,dest=$(pwd)/cache/,mode=max \
 		-f Dockerfile.builder .
 
-	# if target contains , for each subfolder in build-$VERSION, move the file up one folder
+	# if multi-platform TARGET used, for each subfolder in build-$VERSION, move the compiled file up one folder
 	if [[ $TARGET == *","* ]]; then
 		for FOLDER in $(ls build-$VERSION); do
 			mv build-$VERSION/$FOLDER/* build-$VERSION/
