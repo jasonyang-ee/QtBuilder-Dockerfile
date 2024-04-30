@@ -111,6 +111,7 @@ fi
 # Check if src folder NOT contains the file with the version
 if [ ! -f "src/qt-everywhere-src-$VERSION.tar.xz" ]; then
 	echo "Downloading Qt-Everywhere version $VERSION"
+	mkdir src
 	MAJOR_VERSION=$(echo $VERSION | cut -d. -f1,2)
 	curl -L https://download.qt.io/official_releases/qt/$MAJOR_VERSION/$VERSION/single/qt-everywhere-src-$VERSION.tar.xz -o src/qt-everywhere-src-$VERSION.tar.xz
 fi

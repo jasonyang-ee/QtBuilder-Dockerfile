@@ -5,8 +5,7 @@ ARG VERSION
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
     apt-utils curl nano git cmake build-essential ninja-build ca-certificates\
-	libwayland-client0 libwayland-server0 libglx-mesa0 mesa-utils-extra \
-	libegl1 libgles2 libgles-dev libxcb-cursor0 \
+	libwayland-dev libgles-dev libglx-mesa0 mesa-utils-extra libxcb-cursor0 \
 	libfontconfig-dev libopengl-dev libpng-dev libfreetype-dev libxkbcommon-dev
 
 COPY build-$VERSION/Qt6-$TARGETARCH.tar.xz /import/
