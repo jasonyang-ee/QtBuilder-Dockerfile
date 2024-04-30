@@ -25,9 +25,9 @@ It require docker buildx setup with using docker-container driver.
 
 ## To Use `build.sh`
 
-- Build Qt using `build.sh` script.
+- Build Qt from source using `build.sh` script.
   
-	It will produce an output to the `build-$version` folder.
+	It will produce an binary library output to the `build-$version` folder.
 
 	> Help Command
 	```bash
@@ -44,9 +44,9 @@ It require docker buildx setup with using docker-container driver.
 
         -r, --registry <REGISTRY>   Set the registry as prefix for image name
 
-        -b, --build                 Build the Qt Builder image
+        -b, --build                 Build Qt from source into a library binary tarball
 
-        -l, --load                  Save the build result into docker image (--output=type=docker)
+        -l, --load                  Save Qt compiled image in local docker (--output=type=docker)
 
         -t, --target <TARGET>       Override the target platform for the image
                                     Format follows the docker buildx platform format
@@ -98,7 +98,6 @@ It require docker buildx setup with using docker-container driver.
 | ------ | ----------- |
 | `build` | Contains compiled Qt library. |
 | `src` | Contains downloaded Qt source code. |
-| `cache` | Contains docker builderx cache. |
 
 
 

@@ -71,7 +71,7 @@ if [[ $HELP == true ]]; then
 	echo ""
 	echo "  -r, --registry <REGISTRY>  Set the registry as prefix for image name"
 	echo ""
-	echo "  -b, --build                Build the Qt Builder image"
+	echo "  -b, --build                Build Qt from source into a library binary tarball"
 	echo ""
 	echo "  -l, --load                 Save the build result into docker image (--output=type=docker)"
 	echo "                             Image is huge, so --load is not default, and --push is not provided"
@@ -118,13 +118,13 @@ fi
 
 
 
-# Build Qt Builder Image
+# Build Qt from source into a library binary tarball
 if [[ $BUILD == true ]]; then
     docker buildx build \
 		--target=artifact --output type=local,dest=$(pwd)/build-$VERSION/ \
 		--platform $TARGET \
 		--build-arg VERSION=$VERSION \
-		-f Dockerfile.builder .
+		-f Dockerfile.build .
 
 	# if multi-platform TARGET used, for each subfolder in build-$VERSION, move the compiled file up one folder
 	if [[ $TARGET == *","* ]]; then
@@ -135,17 +135,17 @@ if [[ $BUILD == true ]]; then
 	fi
 fi
 
-# Push Qt Builder Image
+# Save Qt compiled image in local docker
 if [[ $LOAD == true ]]; then
     docker buildx build \
 	--target=building --load \
 	--platform $TARGET \
-	-t ${REGISTRY}qt-builder:$VERSION \
+	-t ${REGISTRY}qt-build:$VERSION \
 	--build-arg VERSION=$VERSION \
-	-f Dockerfile.builder .
+	-f Dockerfile.build .
 fi
 
 
 
 # Pushover Notification
-if [ -x "$(command -v ntfy)" ]; then ntfy send "build qt-builder complete"; fi
+if [ -x "$(command -v ntfy)" ]; then ntfy send "build qt-build complete"; fi
