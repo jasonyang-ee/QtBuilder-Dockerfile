@@ -83,15 +83,13 @@ if [[ $HELP == true ]]; then
 	exit 0
 fi
 
-
-
 # Find avaliable Versions
 FULL_VERSIONS=""
 MAJOR_VERSIONS=$(curl -s https://download.qt.io/official_releases/qt/ | grep -oE 'href="[[:digit:]]{1,3}.[[:digit:]]{1,3}' | sed 's/href="//')
 
 for ITEMS in $MAJOR_VERSIONS; do
 	FULL_VERSIONS+=$(curl -s https://download.qt.io/official_releases/qt/$ITEMS/ | grep -oE 'href="[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}' | sed 's/href="//')
-	FULL_VERSIONS+=" "     # Add a seperation between major versions
+	FULL_VERSIONS+=" " # Add a seperation between major versions
 done
 
 # If no version is specified, list all available versions
@@ -116,11 +114,9 @@ if [ ! -f "src/qt-everywhere-src-$VERSION.tar.xz" ]; then
 	curl -L https://download.qt.io/official_releases/qt/$MAJOR_VERSION/$VERSION/single/qt-everywhere-src-$VERSION.tar.xz -o src/qt-everywhere-src-$VERSION.tar.xz
 fi
 
-
-
 # Build Qt from source into a library binary tarball
 if [[ $BUILD == true ]]; then
-    docker buildx build \
+	docker buildx build \
 		--target=artifact --output type=local,dest=$(pwd)/build-$VERSION/ \
 		--platform $TARGET \
 		--build-arg VERSION=$VERSION \
@@ -137,15 +133,13 @@ fi
 
 # Save Qt compiled image in local docker
 if [[ $LOAD == true ]]; then
-    docker buildx build \
-	--target=building --load \
-	--platform $TARGET \
-	-t ${REGISTRY}qt-build:$VERSION \
-	--build-arg VERSION=$VERSION \
-	-f Dockerfile.build .
+	docker buildx build \
+		--target=building --load \
+		--platform $TARGET \
+		-t ${REGISTRY}qt-build:$VERSION \
+		--build-arg VERSION=$VERSION \
+		-f Dockerfile.build .
 fi
-
-
 
 # Pushover Notification
 if [ -x "$(command -v ntfy)" ]; then ntfy send "build qt-build complete"; fi

@@ -60,7 +60,6 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
-
 # Check for help flag
 if [[ $HELP == true ]]; then
 	echo "Usage: build.sh [OPTIONS]"
@@ -80,9 +79,6 @@ if [[ $HELP == true ]]; then
 	echo "                             [Default: linux/amd64,linux/arm64]"
 	exit 0
 fi
-
-
-
 
 # Check if the tarball of the specified Qt version has been produced by the build.sh script
 if [[ ! -d "build-$VERSION" ]]; then
@@ -116,9 +112,6 @@ for ARCH in $ARCHS; do
 	fi
 done
 
-
-
-
 # Build Qt Developer Image using the compiled Qt
 if [[ $BUILD == true ]]; then
 	docker buildx build \
@@ -129,14 +122,10 @@ if [[ $BUILD == true ]]; then
 		-f Dockerfile.dev .
 fi
 
-
-
 # Push the Qt Developer Image to Docker Hub
 if [[ $PUSH == true ]]; then
 	docker push ${REGISTRY}qt-dev:$VERSION
 fi
-
-
 
 # Pushover Notification
 if [ -x "$(command -v ntfy)" ]; then ntfy send "build qt-builder complete"; fi
