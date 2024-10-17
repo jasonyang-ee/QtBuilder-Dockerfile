@@ -120,6 +120,7 @@ if [[ $BUILD == true ]]; then
 		--target=artifact --output type=local,dest=$(pwd)/build-$VERSION/ \
 		--platform $TARGET \
 		--build-arg VERSION=$VERSION \
+		--no-cache \
 		-f Dockerfile.build .
 
 	# if multi-platform TARGET used, for each subfolder in build-$VERSION, move the compiled file up one folder

@@ -1,4 +1,4 @@
-FROM debian:bookworm as qt-environment
+FROM debian:bookworm AS qt-environment
 
 ARG TARGETARCH
 ARG VERSION
@@ -56,7 +56,7 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 
 
 
-FROM qt-environment as download
+FROM qt-environment AS download
 
 RUN mkdir -p /Qt6/Src /Qt6/Build /export /source
 COPY src/qt-everywhere-src-$VERSION.tar.xz /source/qt.tar.xz
@@ -65,7 +65,7 @@ RUN rm -rf /source
 
 
 
-FROM download as building
+FROM download AS building
 
 WORKDIR /Qt6/Build
 RUN /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests
@@ -76,5 +76,5 @@ RUN tar cvfpJ /export/Qt6-$TARGETARCH.tar.xz -C /opt/Qt6 .
 RUN cp /Qt6/Build/config.summary /export/Qt6-$TARGETARCH-config.summary
 
 
-FROM scratch as artifact
+FROM scratch AS artifact
 COPY --from=building /export /
