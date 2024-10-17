@@ -25,6 +25,10 @@ while [[ $# -gt 0 ]]; do
 		BUILD=true
 		shift # past argument
 		;;
+	-s | --slim)
+		SLIM=true
+		shift # past argument
+		;;
 	-l | --load)
 		LOAD=true
 		shift # past argument
@@ -72,6 +76,8 @@ if [[ $HELP == true ]]; then
 	echo "  -r, --registry <REGISTRY>  Set the registry as prefix for image name"
 	echo ""
 	echo "  -b, --build                Build Qt from source into a library binary tarball"
+	echo ""
+	echo "  -s, --slim                 Build Slim Version of Qt from source into a library binary tarball"
 	echo ""
 	echo "  -l, --load                 Save the build result into docker image (--output=type=docker)"
 	echo "                             Image is huge, so --load is not default, and --push is not provided"
@@ -128,6 +134,24 @@ if [[ $BUILD == true ]]; then
 		for FOLDER in $(ls build-$VERSION); do
 			mv build-$VERSION/$FOLDER/* build-$VERSION/
 			rm -r build-$VERSION/$FOLDER
+		done
+	fi
+fi
+
+# Build Slim Version of Qt from source into a library binary tarball
+if [[ $SLIM == true ]]; then
+	docker buildx build \
+		--target=artifact --output type=local,dest=$(pwd)/build-$VERSION/ \
+		--platform $TARGET \
+		--build-arg VERSION=$VERSION \
+		--no-cache \
+		-f Dockerfile.build-slim .
+
+	# if multi-platform TARGET used, for each subfolder in build-$VERSION, move the compiled file up one folder
+	if [[ $TARGET == *","* ]]; then
+		for FOLDER in $(ls build-$VERSION-slim); do
+			mv build-$VERSION/$FOLDER/* build-$VERSION-slim/
+			rm -r build-$VERSION-slim/$FOLDER
 		done
 	fi
 fi
