@@ -122,6 +122,7 @@ fi
 
 # Build Qt from source into a library binary tarball
 if [[ $BUILD == true ]]; then
+	mkdir -p build-$VERSION
 	docker buildx build \
 		--target=artifact --output type=local,dest=$(pwd)/build-$VERSION/ \
 		--platform $TARGET \
@@ -140,8 +141,9 @@ fi
 
 # Build Slim Version of Qt from source into a library binary tarball
 if [[ $SLIM == true ]]; then
+	mkdir -p build-$VERSION-slim
 	docker buildx build \
-		--target=artifact --output type=local,dest=$(pwd)/build-$VERSION/ \
+		--target=artifact --output type=local,dest=$(pwd)/build-$VERSION-slim/ \
 		--platform $TARGET \
 		--build-arg VERSION=$VERSION \
 		--no-cache \
@@ -150,7 +152,7 @@ if [[ $SLIM == true ]]; then
 	# if multi-platform TARGET used, for each subfolder in build-$VERSION, move the compiled file up one folder
 	if [[ $TARGET == *","* ]]; then
 		for FOLDER in $(ls build-$VERSION-slim); do
-			mv build-$VERSION/$FOLDER/* build-$VERSION-slim/
+			mv build-$VERSION-slim/$FOLDER/* build-$VERSION-slim/
 			rm -r build-$VERSION-slim/$FOLDER
 		done
 	fi

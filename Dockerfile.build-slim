@@ -51,6 +51,7 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	libnvidia-egl-wayland-dev \
 	python3-html5lib \
 	libclang-dev \
+	libpq-dev \
 	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 
@@ -90,7 +91,8 @@ RUN /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests 
 	-skip qtwebview \
 	-skip qtserialbus \
 	-skip qtdoc \
-	-skip qtpositioning
+	-skip qtpositioning \
+	-sql-psql
 
 RUN cmake --build . --parallel $(nproc)
 RUN cmake --install .
