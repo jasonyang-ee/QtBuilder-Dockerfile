@@ -37,6 +37,10 @@ while [[ $# -gt 0 ]]; do
 		BUILD=true
 		shift # past argument
 		;;
+	-s | --slim)
+		SLIM=true
+		shift # past argument
+		;;
 	-p | --push)
 		PUSH=true
 		shift # past argument
@@ -71,6 +75,8 @@ if [[ $HELP == true ]]; then
 	echo "  -r, --registry <REGISTRY>  Set the registry as prefix for image name"
 	echo ""
 	echo "  -b, --build                Build the Qt Developer image"
+	echo ""
+	echo "  -s, --slim                Build slim version of the Qt Developer image"
 	echo ""
 	echo "  -p, --push                 Push the Qt Developer image to Docker Hub"
 	echo ""
