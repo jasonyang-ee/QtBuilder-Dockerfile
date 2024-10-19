@@ -15,11 +15,11 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	libxcb-util-dev libxcb-xinerama0-dev libxcb-xkb-dev \
 	libxkbcommon-dev libxkbcommon-x11-dev libpq-dev 
 
-COPY build-$VERSION/Qt6-$TARGETARCH.tar.xz /import/
+COPY build-$VERSION-slim/Qt6-$TARGETARCH.tar.xz /import/
 
 RUN mkdir -p /opt/Qt6
 RUN tar xvfp /import/Qt6-$TARGETARCH.tar.xz -C /opt/Qt6
-COPY build-$VERSION/Qt6-$TARGETARCH-config.summary /opt/Qt6/config.summary
+COPY build-$VERSION-slim/Qt6-$TARGETARCH-config.summary /opt/Qt6/config.summary
 RUN rm /import/Qt6-$TARGETARCH.tar.xz
 
 RUN echo "/opt/Qt6/lib" >> /etc/ld.so.conf && ldconfig

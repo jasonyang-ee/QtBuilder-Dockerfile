@@ -122,6 +122,16 @@ if [[ $BUILD == true ]]; then
 		-f Dockerfile.dev .
 fi
 
+# Build Qt Developer Image using the compiled Qt
+if [[ $SLIM == true ]]; then
+	docker buildx build \
+		--load \
+		--platform $TARGET \
+		--build-arg VERSION=$VERSION \
+		-t ${REGISTRY}qt-dev:$VERSION-slim \
+		-f Dockerfile.dev-slim .
+fi
+
 # Push the Qt Developer Image to Docker Hub
 if [[ $PUSH == true ]]; then
 	docker push ${REGISTRY}qt-dev:$VERSION
