@@ -39,6 +39,8 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	libxkbcommon-dev \
 	libxkbcommon-x11-dev \
 	libgl1-mesa-dev \
+	libegl1-mesa-dev \
+	libgles2-mesa-dev \
 	libfontconfig1 \
 	libxkbcommon0 \
 	libgl1 \
@@ -52,6 +54,14 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	python3-html5lib \
 	libclang-dev \
 	libpq-dev \
+	libdrm-dev \
+	libgl-dev \
+	libclang-dev \
+	mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev \
+	libglew-dev libglfw3-dev libglm-dev \
+	libao-dev libmpg123-dev \
+	libopengl-dev \
+	libegl-dev \
 	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 
@@ -92,7 +102,8 @@ RUN /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests 
 	-skip qtserialbus \
 	-skip qtdoc \
 	-skip qtpositioning \
-	-sql-psql
+	-sql-psql \
+	-opengl es2
 
 RUN cmake --build . --parallel $(nproc)
 RUN cmake --install .
