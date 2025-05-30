@@ -2,6 +2,8 @@ FROM debian:bookworm AS qt-environment
 
 ARG TARGETARCH
 ARG VERSION
+ENV LLVM_INSTALL_DIR=/usr/lib/llvm
+ENV CMAKE_PREFIX_PATH=$LLVM_INSTALL_DIR
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	git \
@@ -74,6 +76,14 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	libicu-dev \
 	libxrandr-dev \
 	libbluetooth-dev \
+	clang \
+	llvm-dev \
+	nodejs \
+	npm \
+	libxcb-composite0-dev \
+	libxcomposite-dev \
+	libxcb-xinput-dev \
+	libxcb-ewmh-dev \
 	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 
