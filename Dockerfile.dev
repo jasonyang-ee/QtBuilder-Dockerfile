@@ -1,19 +1,29 @@
-FROM debian:bookworm
+FROM debian:bookworm-slim as compile-base
 
 ARG TARGETARCH
 ARG VERSION
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
-	apt-utils curl nano git cmake build-essential ninja-build ca-certificates\
-	libwayland-dev libgles-dev libglx-mesa0 mesa-utils-extra  \
-	libopengl-dev libpng-dev libfontconfig1-dev libfreetype6-dev \
-	libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev libxi-dev \
-	libxrender-dev libxcb1-dev libxcb-cursor-dev \
-	libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev \
-	libxcb-icccm4-dev libxcb-sync-dev libxcb-xfixes0-dev \
-	libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev \
-	libxcb-util-dev libxcb-xinerama0-dev libxcb-xkb-dev \
-	libxkbcommon-dev libxkbcommon-x11-dev libpq-dev 
+	apt-utils git cmake build-essential ninja-build curl ca-certificates \
+	libwayland-dev \
+	libopengl-dev \
+	libgles-dev \
+	libxcb-cursor-dev \
+	libfontconfig-dev \
+	libpng-dev \
+	libfreetype-dev \
+	libxkbcommon-dev \
+	postgresql-common
+
+# Add PostgreSQL repository and install dev lib
+RUN install -d /usr/share/postgresql-common/pgdg && \
+    curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
+    sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
+    apt-get -y update && \
+    apt-get install -y --no-install-recommends libpq-dev postgresql-server-dev-16
+
+
+FROM compile-base AS compile
 
 COPY build-$VERSION/Qt6-$TARGETARCH.tar.xz /import/
 
@@ -23,9 +33,11 @@ COPY build-$VERSION/Qt6-$TARGETARCH-config.summary /opt/Qt6/config.summary
 RUN rm /import/Qt6-$TARGETARCH.tar.xz
 
 RUN echo "/opt/Qt6/lib" >> /etc/ld.so.conf && ldconfig
+RUN echo "/usr/local/lib" >> /etc/ld.so.conf && ldconfig
 ENV PATH="${PATH}:/opt/Qt6"
 ENV QT_DIR="/opt/Qt6"
 ENV QT_PLUGIN_PATH="/opt/Qt6/plugins"
+
 # Set the default display server for Raspberry Pi. Use "wayland" if there is a need.
 ENV QT_QPA_PLATFORM=eglfs
 
