@@ -15,6 +15,7 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	ca-certificates \
 	python3 \
 	python3-pip \
+	pkg-config \
 	libfontconfig1-dev \
 	libfreetype6-dev \
 	libx11-dev \
@@ -68,7 +69,8 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	zlib1g-dev \
 	libpng-dev \
 	libsqlite3-dev \
-	libmysqlclient-dev \
+	libmariadb-dev \
+	libmariadb-dev-compat \
 	libpulse-dev \
 	libgstreamer1.0-dev \
 	libgstreamer-plugins-base1.0-dev \
@@ -76,6 +78,7 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	libicu-dev \
 	libxrandr-dev \
 	libbluetooth-dev \
+	libgbm-dev \
 	clang \
 	llvm-dev \
 	nodejs \
@@ -101,12 +104,12 @@ RUN rm -rf /source
 FROM download AS building
 
 WORKDIR /Qt6/Build
-RUN /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests -sql-psql -optimize-size
+RUN /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests -sql-psql -optimize-size -opengl es2
 RUN cmake --build . --parallel $(nproc)
 RUN cmake --install .
 
-RUN tar cvfpJ /export/Qt6-$VERSION-$TARGETARCH.tar.xz -C /opt/Qt6 .
-RUN cp /Qt6/Build/config.summary /export/Qt6-$VERSION-$TARGETARCH-config.summary
+RUN tar cvfpJ /export/Qt6-$TARGETARCH.tar.xz -C /opt/Qt6 .
+RUN cp /Qt6/Build/config.summary /export/Qt6-$TARGETARCH-config.summary
 
 
 FROM scratch AS artifact

@@ -13,6 +13,7 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	ca-certificates \
 	python3 \
 	python3-pip \
+	pkg-config \
 	libfontconfig1-dev \
 	libfreetype6-dev \
 	libx11-dev \
@@ -62,6 +63,28 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	libao-dev libmpg123-dev \
 	libopengl-dev \
 	libegl-dev \
+	libssl-dev \
+	zlib1g-dev \
+	libpng-dev \
+	libsqlite3-dev \
+	libmariadb-dev \
+	libmariadb-dev-compat \
+	libpulse-dev \
+	libgstreamer1.0-dev \
+	libgstreamer-plugins-base1.0-dev \
+	libavahi-client-dev \
+	libicu-dev \
+	libxrandr-dev \
+	libbluetooth-dev \
+	libgbm-dev \
+	clang \
+	llvm-dev \
+	nodejs \
+	npm \
+	libxcb-composite0-dev \
+	libxcomposite-dev \
+	libxcb-xinput-dev \
+	libxcb-ewmh-dev \
 	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 
@@ -79,7 +102,7 @@ RUN rm -rf /source
 FROM download AS building
 
 WORKDIR /Qt6/Build
-RUN /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests \
+RUN /Qt6/Src/configure -prefix /opt/Qt6 -release -nomake examples -nomake tests -optimize-size \
 	-skip qtdatavis3d \
 	-skip qtquick3dphysics \
 	-skip qtgraphs \
