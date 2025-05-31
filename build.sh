@@ -115,9 +115,17 @@ fi
 # Check if src folder NOT contains the file with the version
 if [ ! -f "src/qt-everywhere-src-$VERSION.tar.xz" ]; then
 	echo "Downloading Qt-Everywhere version $VERSION"
-	mkdir src
+	mkdir -p src
 	MAJOR_VERSION=$(echo $VERSION | cut -d. -f1,2)
-	curl -L https://download.qt.io/official_releases/qt/$MAJOR_VERSION/$VERSION/single/qt-everywhere-src-$VERSION.tar.xz -o src/qt-everywhere-src-$VERSION.tar.xz
+	# Qt 6.5 uses 'qt-everywhere-opensource-src' and includes 'src' in the URL path
+	if [[ "$MAJOR_VERSION" == "6.5" ]]; then
+		DOWNLOAD_NAME="qt-everywhere-opensource-src-$VERSION.tar.xz"
+		DOWNLOAD_URL="https://download.qt.io/official_releases/qt/$MAJOR_VERSION/$VERSION/src/single/$DOWNLOAD_NAME"
+	else
+		DOWNLOAD_NAME="qt-everywhere-src-$VERSION.tar.xz"
+		DOWNLOAD_URL="https://download.qt.io/official_releases/qt/$MAJOR_VERSION/$VERSION/single/$DOWNLOAD_NAME"
+	fi
+	curl -L "$DOWNLOAD_URL" -o src/qt-everywhere-src-$VERSION.tar.xz
 fi
 
 # Build Qt from source into a library binary tarball
